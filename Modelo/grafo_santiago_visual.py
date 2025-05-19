@@ -5,7 +5,7 @@
 import osmnx as ox
 import matplotlib.pyplot as plt
 
-grafico = ox.load_graphml("descargas/grafo_santiago.graphml")
+grafico = ox.load_graphml("grafo_santiago.graphml")
 
 ox.plot_graph(
     grafico,

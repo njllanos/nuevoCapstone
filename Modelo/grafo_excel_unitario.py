@@ -17,16 +17,16 @@ import os
 # 2. CARGA DE DATOS
 # =======================
 # Cargar los distintos archivos
-hospital = pd.read_excel("data/hospital.xlsx")
+hospital = pd.read_excel("Capstone_Instancia/data/hospital.xlsx")
 hospital["Tipo"] = "Hospital"
 
-ue = pd.read_excel("data/ue.xlsx")
+ue = pd.read_excel("Capstone_Instancia/data/ue.xlsx")
 ue["Tipo"] = "UE"
 
-um = pd.read_excel("data/um.xlsx")
+um = pd.read_excel("Capstone_Instancia/data/um.xlsx")
 um["Tipo"] = "UM"
 
-pacientes = pd.read_excel("data/pacientes.xlsx", sheet_name="s1")
+pacientes = pd.read_excel("Capstone_Instancia/data/pacientes.xlsx", sheet_name="s1")
 pacientes["Tipo"] = "Pacientes"
 
 # Unirlos todos en un solo DataFrame
@@ -38,7 +38,7 @@ gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df["Longitud"], df["Latit
 # 3. DESCARGA O CARGA DEL GRAFO VIAL
 # =======================
 
-ruta_grafo = "descargas/grafo_santiago.graphml"
+ruta_grafo = "grafo_santiago.graphml"
 
 if os.path.exists(ruta_grafo):
     print("Cargando grafo desde archivo local...")
@@ -48,7 +48,7 @@ else:
     
     # Leer todos los pacientes (solo para la descarga del grafo)
     pacientes_all = pd.concat(
-    pd.read_excel("data/pacientes.xlsx", sheet_name=None),
+    pd.read_excel("Capstone_Instancia/data/pacientes.xlsx", sheet_name=None),
     ignore_index=True
     )
 
