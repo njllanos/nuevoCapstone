@@ -4,9 +4,14 @@ import osmnx as ox
 import ast
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import matplotlib.colors as mcolors
+import colorsys
 from pathlib import Path
 from matplotlib.lines import Line2D
 import numpy as np
+
+seed = 42
+np.random.seed(seed)
 
 #  Parametros de configuracion
 semana = 's1'
@@ -40,6 +45,14 @@ arcos['ruta_nodos'] = arcos['ruta_nodos'].apply(ast.literal_eval)
 Path("visualizaciones").mkdir(parents=True, exist_ok=True)
 
 def plot_rutas_por_enfermero():
+    variables = {}
+    print(f"Cargando variables de decisión para el día {dias_semana[dia]} y modelo {modelos[tipo_modelo]}...")
+    for var in ['X', 'Y', 'Z', 'W', 'RM', 'RE', 'PM', 'PE', 'I']:
+        try:
+            df = pd.read_csv(f"Resultados_Finales/{dias_semana[dia]}/{modelos[tipo_modelo]}/{var}.csv")
+            variables[var] = df
+        except FileNotFoundError:
+            print(f"{var}.csv no encontrado, se omite.")
     df_x = variables.get("X")
     if df_x is None:
         print("❌ Variable X no cargada.")
@@ -118,9 +131,10 @@ def plot_rutas_todos_enfermeros():
         if len(arcos_validos[arcos_validos["Enfermero"] == enf_id]) > 1:
             enfermeros_que_atienden.append(enf_id)
 
-    colormap = plt.colormaps['tab20']
-    colores = {enf: mcolors.rgb2hex(colormap(i / len(enfermeros_que_atienden))) for i, enf in enumerate(enfermeros_que_atienden)}
-
+    colormap = plt.colormaps['nipy_spectral']  # También puedes probar con 'rainbow' o 'hsv'
+    colores = {
+        enf: mcolors.rgb2hex(colormap(i / len(enfermeros_que_atienden))) for i, enf in enumerate(enfermeros_que_atienden)
+    }
 
     for _, fila in arcos_validos.iterrows():
         # es de un enfermero con menos de 2 arcos, se omite
